@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "cocos2d.h"
 
+
+
 // 对应 JSON 中的单张卡牌配置
 struct CardConfigData {
     int face;

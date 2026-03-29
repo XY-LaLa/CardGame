@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "Models/GameModel.h"
+#include "Models/GameModel.h"
 #include "Views/GameView.h"
+#include "Views/CardView.h"
+
 #include <unordered_map>
 
 class CardView;
@@ -8,18 +11,14 @@ class GameController;
 
 //创始化创建并加载手牌区Card
 //管理手牌区的CardModel与CardView的关系
-class PlayFieldController {
+class PlayFieldManager {
 public:
-    PlayFieldController(GameController* mainController);
-    //为游戏数据赋值
-    void init(GameModel* model);
-    //
-    void initView(GameView* gameView);
-
+    PlayFieldManager();
+    ~PlayFieldManager();
     // 提供映射表查询接口
     CardView* getCardViewByModel(CardModel* m);
+    void addToMap(CardModel*, CardView*);
+    void clear();
 private:
-    GameModel* _gameModel = nullptr;
-    GameController* _mainController;
     std::unordered_map<CardModel*, CardView*> _viewMap;
 };

@@ -153,8 +153,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Controllers\GameController.cpp" />
-    <ClCompile Include="..\Classes\Controllers\PlayFieldController.cpp" />
-    <ClCompile Include="..\Classes\Controllers\StackController.cpp" />
+    <ClCompile Include="..\Classes\Managers\PlayFieldManager.cpp" />
+    <ClCompile Include="..\Classes\Managers\StackManager.cpp" />
+    <ClCompile Include="..\Classes\Managers\UndoManager.cpp" />
     <ClCompile Include="..\Classes\Models\CardModel.cpp" />
     <ClCompile Include="..\Classes\Models\GameModel.cpp" />
     <ClCompile Include="..\Classes\Models\UndoModel.cpp" />
@@ -170,8 +171,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Configs\GameConfig.h" />
     <ClInclude Include="..\Classes\Configs\LevelConfig.h" />
     <ClInclude Include="..\Classes\Controllers\GameController.h" />
-    <ClInclude Include="..\Classes\Controllers\PlayFieldController.h" />
-    <ClInclude Include="..\Classes\Controllers\StackController.h" />
+    <ClInclude Include="..\Classes\Managers\PlayFieldManager.h" />
+    <ClInclude Include="..\Classes\Managers\StackManager.h" />
+    <ClInclude Include="..\Classes\Managers\UndoManager.h" />
     <ClInclude Include="..\Classes\Models\CardModel.h" />
     <ClInclude Include="..\Classes\Models\GameModel.h" />
     <ClInclude Include="..\Classes\Models\UndoModel.h" />

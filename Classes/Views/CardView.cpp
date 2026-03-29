@@ -32,8 +32,6 @@ bool CardView::initWithModel(CardModel* model) {
 
     //获取资源路径配置
     _data = CardResourceProvider::getPathsForCard(_model->getSuit(), _model->getFace());
-
-  
     if (!Sprite::initWithFile(_data.cardBack)) {
         return false;
     }

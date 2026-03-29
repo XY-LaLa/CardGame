@@ -13,29 +13,25 @@ void PlayFieldController::init(GameModel* model) {
 
 void PlayFieldController::initView(GameView* gameView) {
     if (!_gameModel) return;
+    // 从 Model 获取该堆栈的所有卡牌数据
+    auto& cards = _gameModel->getPiles()[MAIN_LEFT];
 
-    // 牌阵包含左右两个峰
-    std::vector<SlotID> slots = { MAIN_LEFT, MAIN_RIGHT };
+    for (CardModel* cardModel : cards) {
+        //创建视图
+        auto cardView = CardView::createWithModel(cardModel);
 
-    for (auto slotId : slots) {
-        // 从 Model 获取该堆栈的所有卡牌数据
-        auto& cards = _gameModel->getPiles()[slotId];
+        //设置坐标 (直接使用 JSON 中解析出来的 Position)
+        cardView->setPosition(cardModel->getPosition());
 
-        for (CardModel* cardModel : cards) {
-            // 1. 创建视图 (CardView 内部根据 Model 的 Suit/Face 加载图片)
-            auto cardView = CardView::createWithModel(cardModel);
-
-            // 2. 设置坐标 (直接使用 JSON 中解析出来的 Position)
-            cardView->setPosition(cardModel->getPosition());
-
-            cardView->onClicked = [this](CardView* cv) {
-                // 通过中转交给 GameController 处理
-                _mainController->onCardClicked(cv);
-                };
-
-            // 3. 添加到游戏视图层
-            gameView->addChild(cardView); 
-        }
-
+        cardView->onClicked = [this](CardView* cv) {
+            //通过中转交给 GameController 处理
+            _mainController->onCardClicked(cv);
+            };
+        //加入映射表
+        _viewMap[cardModel] = cardView;
+        //添加到游戏视图层
+        gameView->addChild(cardView);
     }
 }
+
+CardView* PlayFieldController::getCardViewByModel(CardModel* m) { return _viewMap[m]; }

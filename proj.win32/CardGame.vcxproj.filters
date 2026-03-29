@@ -66,11 +66,14 @@
     <ClCompile Include="..\Classes\Controllers\GameController.cpp">
       <Filter>src\Controllers</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Controllers\PlayFieldController.cpp">
-      <Filter>src\Controllers</Filter>
+    <ClCompile Include="..\Classes\Managers\UndoManager.cpp">
+      <Filter>src\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Controllers\StackController.cpp">
-      <Filter>src\Controllers</Filter>
+    <ClCompile Include="..\Classes\Managers\PlayFieldManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Managers\StackManager.cpp">
+      <Filter>src\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,11 +128,14 @@
     <ClInclude Include="..\Classes\Utils\LevelConfigLoader.h">
       <Filter>src\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Controllers\PlayFieldController.h">
-      <Filter>src\Controllers</Filter>
+    <ClInclude Include="..\Classes\Managers\UndoManager.h">
+      <Filter>src\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Controllers\StackController.h">
-      <Filter>src\Controllers</Filter>
+    <ClInclude Include="..\Classes\Managers\PlayFieldManager.h">
+      <Filter>src\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Managers\StackManager.h">
+      <Filter>src\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

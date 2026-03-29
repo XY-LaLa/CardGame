@@ -17,24 +17,27 @@ void StackController::initView(GameView* gameView) {
     std::vector<SlotID> slots = { HAND_LEFT, HAND_RIGHT };
 
     for (auto slotId : slots) {
-        // 从 Model 获取该堆栈的所有卡牌数据
+        //获取堆栈的所有卡牌数据
         auto& cards = _gameModel->getPiles()[slotId];
 
         for (CardModel* cardModel : cards) {
-            // 1. 创建视图 (CardView 内部根据 Model 的 Suit/Face 加载图片)
+            //创建视图
             auto cardView = CardView::createWithModel(cardModel);
 
-            // 2. 设置坐标 (直接使用 JSON 中解析出来的 Position)
+            //设置从关卡配置中读取的初始坐标
             cardView->setPosition(cardModel->getPosition());
 
             cardView->onClicked = [this](CardView* cv) {
-                // 通过中转交给 GameController 处理
+                //通过中转交给 GameController 处理
                 _mainController->onCardClicked(cv);
                 };
-
-            // 3. 添加到游戏视图层
+            //加入映射表
+            _viewMap[cardModel] = cardView;
+            //添加到游戏视图层
             gameView->addChild(cardView);
         }
 
     }
 }
+
+CardView* StackController::getCardViewByModel(CardModel* m) { return _viewMap[m]; }

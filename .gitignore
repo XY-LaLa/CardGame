@@ -432,4 +432,5 @@ proj.mac/
 
 Debug/
 Release/
+proj.win32/Debug.win32/
 *.exe
