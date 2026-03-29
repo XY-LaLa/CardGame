@@ -9,6 +9,7 @@ GamePlayScene::GamePlayScene() {
 
 }
 GamePlayScene::~GamePlayScene() {
+    // 按照单一职责原则，场景销毁时必须清理其拥有的控制器逻辑
     if (_gameController) {
         delete _gameController;
         _gameController = nullptr;
@@ -24,12 +25,8 @@ bool GamePlayScene::init() {
         return false;
     }
     _gameController = new GameController();
-    _gameController->setParentNode(this);
-    _gameController->startGame(Level01);
+    _gameController->setParentNode(this);//建立视图与控制器的联系
+    _gameController->startGame(Level01);//启动关卡
 
     return true;
-}
-
-void GamePlayScene::update(float dt) {
-  
 }

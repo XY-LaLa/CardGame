@@ -13,7 +13,10 @@ void PlayFieldManager::clear() {
     _viewMap.clear();
 }
 
-CardView* PlayFieldManager::getCardViewByModel(CardModel* m) { return _viewMap[m]; }
+CardView* PlayFieldManager::getCardViewByModel(CardModel* m) { 
+    auto it = _viewMap.find(m);
+    return (it != _viewMap.end()) ? it->second : nullptr;
+}
 
 void PlayFieldManager::addToMap(CardModel* model, CardView* view) {
     _viewMap[model] = view;

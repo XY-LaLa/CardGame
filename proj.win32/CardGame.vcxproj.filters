@@ -48,9 +48,6 @@
     <ClCompile Include="..\Classes\Models\GameModel.cpp">
       <Filter>src\Models</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Models\UndoModel.cpp">
-      <Filter>src\Models</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Views\CardView.cpp">
       <Filter>src\Views</Filter>
     </ClCompile>

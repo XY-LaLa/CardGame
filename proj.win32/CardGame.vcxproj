@@ -158,7 +158,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Managers\UndoManager.cpp" />
     <ClCompile Include="..\Classes\Models\CardModel.cpp" />
     <ClCompile Include="..\Classes\Models\GameModel.cpp" />
-    <ClCompile Include="..\Classes\Models\UndoModel.cpp" />
     <ClCompile Include="..\Classes\Scene\GamePlayScene.cpp" />
     <ClCompile Include="..\Classes\Services\GameModelFromLevelGenerator.cpp" />
     <ClCompile Include="..\Classes\Views\CardView.cpp" />

@@ -5,16 +5,32 @@
 #include "Views/CardView.h"
 
 class GameController;
-//创始化创建并加载主牌区Card
-//管理主牌区的CardModel与CardView的关系
+/**
+ * @class StackManager
+ * @brief 手牌堆区域管理器
+ * @details 职责：
+ * 1. 管理 备用牌 和 底牌 的卡牌模型与视图映射。
+ * 2. 与 PlayFieldManager 逻辑相似但职责隔离
+ */
 class StackManager {
 public:
     StackManager();
     ~StackManager();
+    /**
+     * @brief 根据卡牌模型快速索引视图
+     * @param m 卡牌模型指针
+     * @return CardView* 视图指针
+     */
     CardView* getCardViewByModel(CardModel* m);
+    /**
+     * @brief 建立模型与视图的映射关系
+     * @param model 卡牌数据模型
+     * @param view 卡牌精灵视图
+     */
     void addToMap(CardModel*, CardView*);
+    /** @brief 清空 */
     void clear();
 private:
 
-    std::unordered_map<CardModel*, CardView*> _viewMap;
+    std::unordered_map<CardModel*, CardView*> _viewMap;///< 映射表
 };

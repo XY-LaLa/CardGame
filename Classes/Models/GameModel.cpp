@@ -6,7 +6,7 @@ GameModel::GameModel() {
 }
 
 GameModel::~GameModel() {
-    // 遍历哈希表中所有的 vector（每个坑位）
+    // 遍历哈希表中所有的 vector
     for (auto& pair : _piles) {
         auto& pile = pair.second;
         // 遍历 vector 里的每一个 CardModel 指针并释放内存
@@ -52,12 +52,16 @@ void GameModel::moveCard(SlotID from, SlotID to) {
 std::unordered_map<SlotID, std::vector<CardModel*>>& GameModel::getPiles() {
     return _piles;
 }
-
+// 核心匹配规则
 bool GameModel::canMatch(CardModel * targetCard) {
     CardModel* wasteTop = getTopCard(HAND_RIGHT);
     if (!wasteTop) return true; // 底牌为空，随便放
-
+    // 计算分值差值绝对值
     int diff = abs((int)targetCard->getFace() - (int)wasteTop->getFace());
-    // 核心规则：差值为 1 或 循环接龙（K 和 A）
+    /**
+     * 判定逻辑：
+     * 1. diff == 1: 常规连续数字（如 5 和 6）
+     * 2. diff == 12: 循环连续（A 为 1, K 为 13, 13-1=12, 满足 K 和 A 接龙）
+     */
     return (diff == 1 || diff == 12);
 }

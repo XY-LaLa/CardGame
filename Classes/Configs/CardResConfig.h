@@ -2,6 +2,11 @@
 #include <string>
 #include <cocos2d.h>
 
+/**
+ * @struct CardData
+ * @brief 单张卡牌的资源路径数据包
+ * @details 包含构成一张完整扑克牌所需的全部图片路径信息。
+ */
 struct CardData
 {
     std::string bigNumPath;
@@ -12,7 +17,10 @@ struct CardData
 	cocos2d::Vec2 kAnchorPoint = cocos2d::Vec2(0.5f, 0.5f);
 };
 
-// 花色类型
+/**
+ * @enum CardSuitType
+ * @brief 扑克牌花色枚举
+ */
 enum CardSuitType
 {
     CST_NONE = -1,
@@ -23,7 +31,11 @@ enum CardSuitType
     CST_NUM_CARD_SUIT_TYPES
 };
 
-// 正面类型
+/**
+ * @enum CardFaceType
+ * @brief 扑克牌数字点数枚举
+ * @details 内部值 0-12 分别对应 A 到 K。
+ */
 enum CardFaceType
 {
     CFT_NONE = -1,

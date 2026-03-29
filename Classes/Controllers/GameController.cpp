@@ -13,29 +13,34 @@ GameController::GameController(){
 }
 GameController::~GameController() { 
     //删除游戏数据
-    if (_gameModel) delete _gameModel;
+    if (_gameModel) {
+        delete _gameModel; 
+        _gameModel = nullptr;
+    }
 }
 
 void GameController::startGame(LevelID id) {
+    //重置子系统状态
     _undoManager.clear();
     _playFieldManager.clear();
     _stackManager.clear();
 
     if (id == LevelID::Title) return;
-    //加载配置
+    //加载配置 
     LevelConfig config = LevelConfigLoader::loadLevelConfig(id);
 
-    //生成数据模型
+    //数据初始化
     if(_gameModel) delete _gameModel;//清理
     _gameModel = GameModelFromLevelGenerator::generateFromFile(config);
 
     if (!_gameModel)return;
    
-    //创建GameView
+    //视图初始化
     if (_gameView) _gameView->removeFromParent();
     _gameView = GameView::create();
     _rootNode->addChild(_gameView);
-    // 绑定按钮回调
+
+    // 绑定 UI 撤销按钮回调
     _gameView->onUndoBtnClicked = [this]() {
         _undoManager.undo();
         };
@@ -43,6 +48,10 @@ void GameController::startGame(LevelID id) {
     initCardViews();
 }
 
+/**
+ * 注意：此函数负责模型到视图的映射绑定
+ * 遵循 50 行规范。若后续增加更多装饰逻辑，建议将创建逻辑抽离。
+ */
 void GameController::initCardViews() {
     if (!_gameModel) return;
     // 从 Model 获取该堆栈的所有卡牌数据
@@ -53,16 +62,17 @@ void GameController::initCardViews() {
         std::vector<CardModel*>& cardsModels = pair.second;
 
         for (auto* cardModel : cardsModels) {
+            //创建视图并绑定数据模型
             auto cardView = CardView::createWithModel(cardModel);
-            //初始化位置 使用Model
             cardView->setPosition(cardModel->getPosition());
+
+            //设置交互回调
             cardView->onClicked = [this](CardView* cv) {
-                //通过中转交给 GameController 处理
                 this->onCardClicked(cv);
                 };
 
             _gameView->addChild(cardView);
-
+            //根据槽位类型存入不同的管理器
             if (slotId == HAND_LEFT || slotId == HAND_RIGHT) {
                 _stackManager.addToMap(cardModel, cardView);
             }
@@ -72,6 +82,9 @@ void GameController::initCardViews() {
 
         }
     }
+	//游戏初始 自动将备用牌堆顶牌移至底牌堆 且不记录撤销操作
+    executeMove(_gameModel->getPiles()[HAND_LEFT].back(), HAND_LEFT, HAND_RIGHT, true);
+    
 }
 
 void GameController::setParentNode(cocos2d::Node* node) { _rootNode = node; }
@@ -81,40 +94,40 @@ void GameController::onCardClicked(CardView* cardView) {
 }
 
 void GameController::rules(CardView* cardView) {
+    //只有顶层牌可以操作
     auto cardModel = cardView->getModel();
     if (!_gameModel->isCardAtTop(cardModel)) return;
 
     auto fromId = cardModel->getSlotID();
-    if (fromId == HAND_RIGHT) return;
+    if (fromId == HAND_RIGHT) return;//底牌不可点击
 
+    //匹配检查
     if (fromId == HAND_LEFT || _gameModel->canMatch(cardModel)) {
-        // 调用封装好的移动方法
+        //调用移动方法
         executeMove(cardModel, fromId, HAND_RIGHT,false);
     }
 }
 
 
 void GameController::executeMove(CardModel* card, SlotID from, SlotID to, bool isUndo) {
-    // 1. 数据模型变更
+    //格子变更
     _gameModel->moveCard(from, to);
-
+    //在非撤销操作时记录
     if (!isUndo) {
         _undoManager.pushStack({ card, from, to });
     }
-
+    //查找对应的视图对象
     auto cardView = _playFieldManager.getCardViewByModel(card);
     if (!cardView) cardView = _stackManager.getCardViewByModel(card);
 
     if (cardView) {
-        // --- 改进的坐标计算逻辑 ---
         cocos2d::Vec2 targetPos;
-
         if (to == HAND_RIGHT) {
             // 如果是去底牌堆使用固定的起点
             targetPos = slotTable[to].startPosition;
         }
         else {
-            //回到牌阵（回退操作）计算偏移    
+            //计算偏移    
             int index = (int)_gameModel->getPiles()[to].size() - 1;
             // 基础坐标 + (偏移量 * 索引)
             targetPos = slotTable[to].startPosition + (slotTable[to].offset * index);
