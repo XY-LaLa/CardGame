@@ -429,3 +429,7 @@ proj.mac/
 
 # Cocos 缓存
 *.manifest
+
+Debug/
+Release/
+*.exe

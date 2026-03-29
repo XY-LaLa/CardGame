@@ -17,6 +17,8 @@ public:
 	bool isCardAtTop(CardModel* card);
 	void moveCard(SlotID from, SlotID to);
 
+	bool canMatch(CardModel* targetCard);
+
 	std::unordered_map<SlotID, std::vector<CardModel*>>& getPiles();
 private:
 	std::unordered_map<SlotID, std::vector<CardModel*>> _piles;

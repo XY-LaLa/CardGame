@@ -38,44 +38,6 @@ bool GameModel::isCardAtTop(CardModel* card) {
     return !pile.empty() && pile.back() == card;
 }
 
-bool GameModel::isCardAtTop(CardModel* card) {
-    if (!card) return false;
-
-    SlotID slotId = card->getSlotID();
-    const auto& pile = _piles[slotId];
-
-    // 1. 找到当前牌在 vector 中的位置
-    auto it = std::find(pile.begin(), pile.end(), card);
-    if (it == pile.end()) return false;
-
-    // 定义当前牌的矩形区域 (使用 JSON 里的坐标)
-    // 假设卡牌尺寸为 kCardWidth, kCardHeight
-    cocos2d::Rect targetRect(
-        card->getPosition().x - card.get / 2,
-        card->getPosition().y - kCardHeight / 2,
-        kCardWidth,
-        kCardHeight
-    );
-
-    // 2. 检查所有排在它之后的牌（视觉上叠在它上面的牌）
-    for (auto nextIt = std::next(it); nextIt != pile.end(); ++nextIt) {
-        CardModel* upperCard = *nextIt;
-
-        cocos2d::Rect upperRect(
-            upperCard->getPosition().x - kCardWidth / 2,
-            upperCard->getPosition().y - kCardHeight / 2,
-            kCardWidth,
-            kCardHeight
-        );
-
-        // 3. 判断矩形是否相交
-        if (targetRect.intersectsRect(upperRect)) {
-            return false; // 被压住了，不是栈顶
-        }
-    }
-
-    return true; // 没有被任何上层牌压住
-}
 
 // 移动牌：从一个堆移动到另一个堆
 void GameModel::moveCard(SlotID from, SlotID to) {
@@ -89,4 +51,13 @@ void GameModel::moveCard(SlotID from, SlotID to) {
 
 std::unordered_map<SlotID, std::vector<CardModel*>>& GameModel::getPiles() {
     return _piles;
+}
+
+bool GameModel::canMatch(CardModel * targetCard) {
+    CardModel* wasteTop = getTopCard(HAND_RIGHT);
+    if (!wasteTop) return true; // 底牌为空，随便放
+
+    int diff = abs((int)targetCard->getFace() - (int)wasteTop->getFace());
+    // 核心规则：差值为 1 或 循环接龙（K 和 A）
+    return (diff == 1 || diff == 12);
 }

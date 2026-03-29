@@ -44,9 +44,7 @@ void GameController::setParentNode(cocos2d::Node* node) { _rootNode = node; }
 
 void GameController::onCardClicked(CardView* cardView) {
     rules(cardView);
-    
-    
-   
+
 }
 
 void GameController::rules(CardView* cardView) {
@@ -63,7 +61,7 @@ void GameController::rules(CardView* cardView) {
             cardView->flyTo(targetPos, newZ, [cardView]() {});
         }
         else{
-            if (canCollectCard(cardModel)) {
+            if (_gameModel->canMatch(cardModel)) {
                 _gameModel->moveCard(id, HAND_RIGHT);
 
                 auto targetPos = slotTable[HAND_RIGHT].startPosition;
@@ -74,20 +72,4 @@ void GameController::rules(CardView* cardView) {
         }
 
     }
-}
-
-
-// 判定规则：比底牌大 1 或小 1
-bool GameController::canCollectCard(CardModel* targetModel) {
-    // 2. 获取当前底牌
-    auto& wastePile = _gameModel->getPiles()[HAND_RIGHT];
-    if (wastePile.empty()) return true; // 如果底牌空了，任何牌都能收（通常不会发生）
-
-    CardModel* topWaste = wastePile.back();
-    int targetVal = (int)targetModel->getFace();
-    int wasteVal = (int)topWaste->getFace();
-
-    // 逻辑判定：±1 或者是 K 与 A 连通
-    int diff = std::abs(targetVal - wasteVal);
-    return (diff == 1 || diff == 12); // 12 是 A(1) 和 K(13) 的差值
 }

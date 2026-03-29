@@ -13,8 +13,6 @@ public:
     void setParentNode(cocos2d::Node* node);
 
     void onCardClicked(CardView* cardView);
-    void handleDrawCard(CardView* cardView);
-    bool canCollectCard(CardModel* targetModel);
 private:
     void rules(CardView* cardView);
 
